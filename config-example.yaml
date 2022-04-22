@@ -220,3 +220,11 @@ unix_socket_permission: "0770"
 #   namespace: `first-name.last-name.example.com`
 #
 #   strip_email_domain: true
+
+# Some api configs.
+# Default behaviour for allow_origins is allow all
+#
+# api:
+#   cors:
+#     allow_origins:
+#       - localhost:3000
