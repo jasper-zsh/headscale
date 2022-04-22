@@ -850,6 +850,58 @@
         }
       }
     },
+    "v1HostInfo": {
+      "type": "object",
+      "properties": {
+        "ipnVersion": {
+          "type": "string"
+        },
+        "frontendLogId": {
+          "type": "string"
+        },
+        "backendLogId": {
+          "type": "string"
+        },
+        "os": {
+          "type": "string"
+        },
+        "osVersion": {
+          "type": "string"
+        },
+        "package": {
+          "type": "string"
+        },
+        "deviceModel": {
+          "type": "string"
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "shieldsUp": {
+          "type": "boolean"
+        },
+        "shareeNode": {
+          "type": "boolean"
+        },
+        "goArch": {
+          "type": "string"
+        },
+        "requestTags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "repeated IPPrefix routable_ips  = 12;"
+        },
+        "sshHostKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "repeated Service services = 14;\nNetInfo net_info = 15;"
+        }
+      }
+    },
     "v1ListApiKeysResponse": {
       "type": "object",
       "properties": {
@@ -943,6 +995,9 @@
         },
         "registerMethod": {
           "$ref": "#/definitions/v1RegisterMethod"
+        },
+        "hostInfo": {
+          "$ref": "#/definitions/v1HostInfo"
         }
       }
     },

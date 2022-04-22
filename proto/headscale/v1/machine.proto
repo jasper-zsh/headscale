@@ -35,9 +35,28 @@ message Machine {
     // google.protobuf.Timestamp updated_at = 14;
     // google.protobuf.Timestamp deleted_at = 15;
 
-    // bytes host_info      = 15;
+    HostInfo host_info      = 15;
     // bytes endpoints      = 16;
     // bytes enabled_routes = 17;
+}
+
+message HostInfo {
+    string ipn_version = 1;
+    string frontend_log_id = 2;
+    string backend_log_id = 3;
+    string os = 4;
+    string os_version = 5;
+    string package = 6;
+    string device_model = 7;
+    string hostname = 8;
+    bool shields_up = 9;
+    bool sharee_node = 10;
+    string go_arch = 11;
+    // repeated IPPrefix routable_ips  = 12;
+    repeated string request_tags = 13;
+    // repeated Service services = 14;
+    // NetInfo net_info = 15;
+    repeated string ssh_host_keys = 16;
 }
 
 message RegisterMachineRequest {

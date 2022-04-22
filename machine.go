@@ -618,6 +618,7 @@ func (machine *Machine) toProto() *v1.Machine {
 		// RegisterMethod: ,
 
 		CreatedAt: timestamppb.New(machine.CreatedAt),
+		HostInfo:  machine.HostInfo.toProto(),
 	}
 
 	if machine.AuthKey != nil {
@@ -801,4 +802,24 @@ func (h *Headscale) RenameMachine(machineID uint64, newName string) (*Machine, e
 	}
 
 	return machine, nil
+}
+
+func (i *HostInfo) toProto() *v1.HostInfo {
+	ret := &v1.HostInfo{
+		IpnVersion:    i.IPNVersion,
+		FrontendLogId: i.FrontendLogID,
+		BackendLogId:  i.BackendLogID,
+		Os:            i.OS,
+		OsVersion:     i.OSVersion,
+		Package:       i.Package,
+		DeviceModel:   i.DeviceModel,
+		Hostname:      i.Hostname,
+		ShieldsUp:     i.ShieldsUp,
+		ShareeNode:    i.ShareeNode,
+		GoArch:        i.GoArch,
+		RequestTags:   i.RequestTags,
+		SshHostKeys:   i.SSH_HostKeys,
+	}
+
+	return ret
 }
