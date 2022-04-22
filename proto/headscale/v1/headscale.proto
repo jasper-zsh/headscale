@@ -104,6 +104,12 @@ service HeadscaleService {
             get: "/api/v1/machine"
         };
     }
+
+    rpc RenameMachine(RenameMachineRequest) returns (RenameMachineResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/machine/{machine_id}/name"
+        };
+    }
     // --- Machine end ---
 
     // --- Route start ---

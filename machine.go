@@ -776,3 +776,29 @@ func (machine *Machine) RoutesToProto() *v1.Routes {
 		EnabledRoutes:    ipPrefixToString(enabledRoutes),
 	}
 }
+
+func (h *Headscale) RenameMachine(machineID uint64, newName string) (*Machine, error) {
+	err := CheckForFQDNRules(newName)
+	if err != nil {
+		log.Error().
+			Caller().
+			Str("func", "RenameMachine").
+			Str("newName", newName).
+			Err(err)
+
+		return nil, err
+	}
+
+	machine, err := h.GetMachineByID(machineID)
+	if err != nil {
+		return nil, err
+	}
+
+	machine.Name = newName
+
+	if result := h.db.Save(machine); result.Error != nil {
+		return nil, result.Error
+	}
+
+	return machine, nil
+}

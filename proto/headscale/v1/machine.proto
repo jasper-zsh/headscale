@@ -90,3 +90,12 @@ message DebugCreateMachineRequest {
 message DebugCreateMachineResponse {
     Machine machine = 1;
 }
+
+message RenameMachineRequest {
+    uint64 machine_id = 1;
+    string new_name = 2;
+}
+
+message RenameMachineResponse {
+    Machine machine = 1;
+}

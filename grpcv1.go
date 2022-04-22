@@ -5,7 +5,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/juanfont/headscale/gen/go/headscale/v1"
+	v1 "github.com/juanfont/headscale/gen/go/headscale/v1"
 	"github.com/rs/zerolog/log"
 	"tailscale.com/tailcfg"
 )
@@ -388,6 +388,16 @@ func (api headscaleV1APIServer) DebugCreateMachine(
 	)
 
 	return &v1.DebugCreateMachineResponse{Machine: newMachine.toProto()}, nil
+}
+
+func (api headscaleV1APIServer) RenameMachine(ctx context.Context, req *v1.RenameMachineRequest) (*v1.RenameMachineResponse, error) {
+	machine, err := api.h.RenameMachine(req.MachineId, req.NewName)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.RenameMachineResponse{
+		Machine: machine.toProto(),
+	}, nil
 }
 
 func (api headscaleV1APIServer) mustEmbedUnimplementedHeadscaleServiceServer() {}

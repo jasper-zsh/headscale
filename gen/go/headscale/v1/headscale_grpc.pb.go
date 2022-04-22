@@ -39,6 +39,7 @@ type HeadscaleServiceClient interface {
 	DeleteMachine(ctx context.Context, in *DeleteMachineRequest, opts ...grpc.CallOption) (*DeleteMachineResponse, error)
 	ExpireMachine(ctx context.Context, in *ExpireMachineRequest, opts ...grpc.CallOption) (*ExpireMachineResponse, error)
 	ListMachines(ctx context.Context, in *ListMachinesRequest, opts ...grpc.CallOption) (*ListMachinesResponse, error)
+	RenameMachine(ctx context.Context, in *RenameMachineRequest, opts ...grpc.CallOption) (*RenameMachineResponse, error)
 	// --- Route start ---
 	GetMachineRoute(ctx context.Context, in *GetMachineRouteRequest, opts ...grpc.CallOption) (*GetMachineRouteResponse, error)
 	EnableMachineRoutes(ctx context.Context, in *EnableMachineRoutesRequest, opts ...grpc.CallOption) (*EnableMachineRoutesResponse, error)
@@ -182,6 +183,15 @@ func (c *headscaleServiceClient) ListMachines(ctx context.Context, in *ListMachi
 	return out, nil
 }
 
+func (c *headscaleServiceClient) RenameMachine(ctx context.Context, in *RenameMachineRequest, opts ...grpc.CallOption) (*RenameMachineResponse, error) {
+	out := new(RenameMachineResponse)
+	err := c.cc.Invoke(ctx, "/headscale.v1.HeadscaleService/RenameMachine", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *headscaleServiceClient) GetMachineRoute(ctx context.Context, in *GetMachineRouteRequest, opts ...grpc.CallOption) (*GetMachineRouteResponse, error) {
 	out := new(GetMachineRouteResponse)
 	err := c.cc.Invoke(ctx, "/headscale.v1.HeadscaleService/GetMachineRoute", in, out, opts...)
@@ -248,6 +258,7 @@ type HeadscaleServiceServer interface {
 	DeleteMachine(context.Context, *DeleteMachineRequest) (*DeleteMachineResponse, error)
 	ExpireMachine(context.Context, *ExpireMachineRequest) (*ExpireMachineResponse, error)
 	ListMachines(context.Context, *ListMachinesRequest) (*ListMachinesResponse, error)
+	RenameMachine(context.Context, *RenameMachineRequest) (*RenameMachineResponse, error)
 	// --- Route start ---
 	GetMachineRoute(context.Context, *GetMachineRouteRequest) (*GetMachineRouteResponse, error)
 	EnableMachineRoutes(context.Context, *EnableMachineRoutesRequest) (*EnableMachineRoutesResponse, error)
@@ -303,6 +314,9 @@ func (UnimplementedHeadscaleServiceServer) ExpireMachine(context.Context, *Expir
 }
 func (UnimplementedHeadscaleServiceServer) ListMachines(context.Context, *ListMachinesRequest) (*ListMachinesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListMachines not implemented")
+}
+func (UnimplementedHeadscaleServiceServer) RenameMachine(context.Context, *RenameMachineRequest) (*RenameMachineResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RenameMachine not implemented")
 }
 func (UnimplementedHeadscaleServiceServer) GetMachineRoute(context.Context, *GetMachineRouteRequest) (*GetMachineRouteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMachineRoute not implemented")
@@ -584,6 +598,24 @@ func _HeadscaleService_ListMachines_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _HeadscaleService_RenameMachine_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RenameMachineRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HeadscaleServiceServer).RenameMachine(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/headscale.v1.HeadscaleService/RenameMachine",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HeadscaleServiceServer).RenameMachine(ctx, req.(*RenameMachineRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _HeadscaleService_GetMachineRoute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetMachineRouteRequest)
 	if err := dec(in); err != nil {
@@ -736,6 +768,10 @@ var HeadscaleService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListMachines",
 			Handler:    _HeadscaleService_ListMachines_Handler,
+		},
+		{
+			MethodName: "RenameMachine",
+			Handler:    _HeadscaleService_RenameMachine_Handler,
 		},
 		{
 			MethodName: "GetMachineRoute",
