@@ -31,11 +31,16 @@ func (s *Suite) TestGetMachine(c *check.C) {
 		NamespaceID:    namespace.ID,
 		RegisterMethod: RegisterMethodAuthKey,
 		AuthKeyID:      uint(pak.ID),
+		HostInfo: HostInfo{
+			Hostname: "testmachine",
+		},
 	}
 	app.db.Save(machine)
 
-	_, err = app.GetMachine("test", "testmachine")
+	m, err := app.GetMachine("test", "testmachine")
 	c.Assert(err, check.IsNil)
+	c.Assert(m, check.NotNil)
+	c.Assert(m.HostInfo.Hostname, check.Equals, "testmachine")
 }
 
 func (s *Suite) TestGetMachineByID(c *check.C) {
