@@ -19,6 +19,7 @@ import (
 	"time"
 
 	"github.com/coreos/go-oidc/v3/oidc"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -113,6 +114,8 @@ type Config struct {
 	OIDC OIDCConfig
 
 	CLI CLIConfig
+
+	API APIConfig
 }
 
 type OIDCConfig struct {
@@ -139,6 +142,14 @@ type CLIConfig struct {
 	APIKey   string
 	Timeout  time.Duration
 	Insecure bool
+}
+
+type APIConfig struct {
+	Cors *CorsConfig
+}
+
+type CorsConfig struct {
+	AllowOrigins []string
 }
 
 // Headscale represents the base app of the service.
@@ -457,6 +468,19 @@ func (h *Headscale) createPrometheusRouter() *gin.Engine {
 	return promRouter
 }
 
+func (h *Headscale) createCorsMiddleware() gin.HandlerFunc {
+	cfg := h.cfg.API.Cors
+	config := cors.DefaultConfig()
+	config.AllowHeaders = append(config.AllowHeaders, "authorization")
+
+	config.AllowOrigins = cfg.AllowOrigins
+	if len(config.AllowOrigins) == 0 {
+		config.AllowAllOrigins = true
+	}
+
+	return cors.New(config)
+}
+
 func (h *Headscale) createRouter(grpcMux *runtime.ServeMux) *gin.Engine {
 	router := gin.Default()
 
@@ -484,6 +508,7 @@ func (h *Headscale) createRouter(grpcMux *runtime.ServeMux) *gin.Engine {
 	}
 
 	api := router.Group("/api")
+	api.Use(h.createCorsMiddleware())
 	api.Use(h.httpAuthenticationMiddleware)
 	{
 		api.Any("/v1/*any", gin.WrapF(grpcMux.ServeHTTP))

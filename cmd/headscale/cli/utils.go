@@ -376,6 +376,12 @@ func getHeadscaleConfig() headscale.Config {
 			Timeout:  viper.GetDuration("cli.timeout"),
 			Insecure: viper.GetBool("cli.insecure"),
 		},
+
+		API: headscale.APIConfig{
+			Cors: &headscale.CorsConfig{
+				AllowOrigins: viper.GetStringSlice("api.cors.allow_origins"),
+			},
+		},
 	}
 }
 
